@@ -1,12 +1,15 @@
 import cv2
 import numpy as np
 
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 800)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
-cap.set(cv2.CAP_PROP_FPS, 120)
-scaling_factor = 2
-crop_factor = 20
+# cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 800)
+# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
+# cap.set(cv2.CAP_PROP_FPS, 120)
+
+cap = cv2.VideoCapture("1.mp4")
+
+scaling_factor = 1
+crop_factor = 12
 while True:
     ret, original_frame = cap.read()
     try:
@@ -57,12 +60,13 @@ while True:
         cnts2 = [contours[i] for i in idxs]
         c = [cnts2[-2]]
         (x, y, w, h) = cv2.boundingRect(c[0])
-        cv2.rectangle(bin, (x, y), (x+w, y+h), (0, 0, 0), 2)
 
         center = np.mean([[x, y], [x+w, y+h]], axis=0)
 
         cv2.circle(bin, np.intp(np.rint(center)), 1,
                    (255, 255, 255), 30*scaling_factor)
+
+        cv2.imshow("bin2", bin)
 
         absolut_center = ((center_target[0])+(center[0] - width/2)/scaling_factor,
                           (center_target[1])+(center[1] - height/2)/scaling_factor)
