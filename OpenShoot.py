@@ -23,13 +23,13 @@ while True:
     try:
         frame = cv2.cvtColor(original_frame, cv2.COLOR_BGR2GRAY)
         org_height, org_width = frame.shape
-        orgheight, orgwidth = frame.shape
         cv2.medianBlur(frame, 5)
 
         height, width = frame.shape
 
         frame = frame[int(height/2-height/4):int(height/2+height/4),
                       int(width/2-width/4):int(width/2+width/4)]
+        orgheight, orgwidth = frame.shape
 
         cv2.imshow("bin3", frame)
 
@@ -84,11 +84,14 @@ while True:
 
         cv2.imshow("bin2", bin)
 
+        print((center_target[0]-orgwidth/2), (center_target[1]-orgheight/2))
+
         absolut_center = ((center_target[0]-orgwidth/2)+(center[0] - width/2)/scaling_factor,
                           (center_target[1]-orgheight/2)+(center[1] - height/2)/scaling_factor)
+        print(absolut_center)
         
         distance = np.array(absolut_center) * 0.03
-        distance = distance - [-10.27255258,-5.90265774]
+        print(distance)
         datasocket.sendto((str(distance[0]) + ";" + str(distance[1])).encode(), address)
     except:
         pass
