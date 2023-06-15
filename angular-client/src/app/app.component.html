@@ -1,0 +1,22 @@
+<div id="page">
+  <div id="header">
+    <h1 id="HeaderText">OPENSHOT</h1>
+  </div>
+  <div id="content">
+    <div id="target">
+      <canvas #canvas id="canavas" width="800" height="800">
+      </canvas>
+    </div>
+    <div id="sidebar">
+      <h1 id="SidebarText">SHOT&nbsp;SELECTION</h1>
+      <ng-container *ngFor="let serie of series; let i = index">
+        <div class="serie" >
+          <div class="serie-number">{{i + 1}}. Series</div>
+          <ng-container *ngFor="let shots of serie; let j = index">
+            <button class="shot" (click)="selectShot(j)">{{j + 1}}. Shot</button>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

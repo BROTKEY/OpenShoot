@@ -1,0 +1,82 @@
+#page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+#HeaderText{
+    font-size: 32px;
+}
+
+#header {
+    flex: 1;
+    background-color: #333333;
+    padding: 1rem;
+    padding-left: 4rem;
+}
+
+#content {
+    flex: 9;
+    min-height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#target {
+    margin: 20px;
+    flex: 2;
+    box-shadow: 0 0 20px #000;
+    background-color: #000;
+}
+
+#sidebar {
+    flex: 1;
+    min-height: 100%;
+    background-color: #525252;
+    padding: 1rem;
+}
+
+canvas {
+    height: auto;
+    width: 100%;
+    min-width: 400px;
+}
+
+#SidebarText {
+    font-size: 24px;
+}
+
+.serie {
+    border-top: #89ce94 2px solid;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.serie-number {
+    margin-bottom: 10px;
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+.shot {
+    background-color: #3d3d3d;
+    border: #89ce94 2px solid;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    
+    transition: background-color .2s ease-in-out;
+    -moz-transition: background-color .2s ease-in-out;
+    -webkit-transition: background-color .2s ease-in-out;
+}
+
+.shot:hover {
+    background-color: #7d5ba6;
+
+    transition: background-color .2s ease-in-out;
+    -moz-transition: background-color .2s ease-in-out;
+    -webkit-transition: background-color .2s ease-in-out;
+}
