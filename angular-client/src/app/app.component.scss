@@ -25,9 +25,18 @@
 
 #target {
     margin: 20px;
-    flex: 2;
-    box-shadow: 0 0 20px #000;
-    background-color: #000;
+    flex: 1.2;
+    box-shadow: 0 0 10px 5px #3d3d3d;
+    background-color: #fff !important;
+}
+
+#target-text {
+    text-align: center;
+    background-color: #89ce94;
+    border-radius: 3px;
+    padding: 5px;
+    margin: 5px;
+    color: #000 !important;
 }
 
 #sidebar {
@@ -40,7 +49,7 @@
 canvas {
     height: auto;
     width: 100%;
-    min-width: 400px;
+    min-width: 300px;
 }
 
 #SidebarText {
@@ -64,7 +73,6 @@ canvas {
 .shot {
     background-color: #3d3d3d;
     border: #89ce94 2px solid;
-    border-radius: 10px;
     padding: 5px;
     margin: 5px;
     
@@ -74,7 +82,7 @@ canvas {
 }
 
 .shot:hover {
-    background-color: #7d5ba6;
+    background-color: #636262;
 
     transition: background-color .2s ease-in-out;
     -moz-transition: background-color .2s ease-in-out;

@@ -6,6 +6,7 @@
     <div id="target">
       <canvas #canvas id="canavas" width="800" height="800">
       </canvas>
+      <div id="target-text" *ngIf="trigger_calibrated">CALIBRATED</div>
     </div>
     <div id="sidebar">
       <h1 id="SidebarText">SHOT&nbsp;SELECTION</h1>
@@ -13,7 +14,7 @@
         <div class="serie" >
           <div class="serie-number">{{i + 1}}. Series</div>
           <ng-container *ngFor="let shots of serie; let j = index">
-            <button class="shot" (click)="selectShot(j)">{{j + 1}}. Shot</button>
+            <button class="shot" (click)="selectShot(i,j)">{{j + 1}}. Shot</button>
           </ng-container>
         </div>
       </ng-container>
