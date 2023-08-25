@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   trigger_calibrated = false;
   startTime = new Date().getTime();
   trigger_pull_time = 0;
+  shot_selected = false;
 
   ngOnInit(): void {
     this.context = this.canvas.nativeElement.getContext('2d')!;
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
 
     this.socket.onmessage = (event) => {
       const receivedTime = new Date().getTime();
+
       const data = event.data.split(';');
       const shotdata = [
         ((parseFloat(data[0]) * -1) / 3) * 271 + 400,
@@ -47,6 +49,24 @@ export class AppComponent implements OnInit {
         }
         return;
       }
+
+      if (receivedTime - this.trigger_pull_time < 2000) {
+        this.startTime = receivedTime;
+        let series_offset = 1;
+        if (this.series[this.series.length - 1].length == 1) {
+          series_offset = 2;
+        }
+
+        this.series[this.series.length - series_offset][
+          this.series[this.series.length - series_offset].length - 2
+        ].push(shotdata);
+      }
+
+      if (receivedTime - this.trigger_pull_time < 30000) {
+        return;
+      }
+
+      console.log('ping');
 
       if (this.series[this.series.length - 1].length > 9) {
         this.series.push([]);
@@ -66,6 +86,9 @@ export class AppComponent implements OnInit {
       ].push(shotdata);
 
       this.detectTriggerPull(shotdata[2], receivedTime);
+
+      if (this.shot_selected) return;
+
       this.selectShot(
         this.series.length - 1,
         this.series[this.series.length - 1].length - 1
@@ -76,15 +99,12 @@ export class AppComponent implements OnInit {
   detectTriggerPull(triggerData: number, receivedTime: number) {
     console.log(triggerData);
     console.log(this.calibratedTriggerPull);
-    if (
-      triggerData < this.calibratedTriggerPull - 40 &&
-      receivedTime - this.trigger_pull_time > 30000
-    ) {
+    if (triggerData < this.calibratedTriggerPull - 40) {
       this.trigger_pull_time = receivedTime;
       console.log('PENG');
       this.series[this.series.length - 1].push([]);
       if (this.series[this.series.length - 1].length > 9) {
-        this.series.push([]);
+        this.series.push([[]]);
       }
     }
   }
@@ -95,6 +115,13 @@ export class AppComponent implements OnInit {
     img.src = 'assets/Luftgewehrscheibe.png';
     img.onload = () => {
       this.context.beginPath();
+      this.context.clearRect(
+        0,
+        0,
+        this.canvas.nativeElement.width,
+        this.canvas.nativeElement.height
+      );
+      this.context.drawImage(img, 0, 0);
       this.series[series][shot].forEach((data, i) => {
         this.context.moveTo(data[0], data[1]);
         if (i != 0) {
@@ -104,18 +131,9 @@ export class AppComponent implements OnInit {
           );
         }
         if (!this.series[series][shot][i + 1]) {
-          this.context.arc(data[0], data[1], 20, 0, 2 * Math.PI, false);
-          this.context.fillStyle = 'red';
-          this.context.fill();
+          this.context.arc(data[0], data[1], 10, 0, 2 * Math.PI, false);
         }
       });
-      this.context.clearRect(
-        0,
-        0,
-        this.canvas.nativeElement.width,
-        this.canvas.nativeElement.height
-      );
-      this.context.drawImage(img, 0, 0);
       this.context.stroke();
     };
   }

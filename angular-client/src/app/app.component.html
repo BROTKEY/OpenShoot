@@ -1,23 +1,49 @@
 <div id="page">
-  <div id="header">
-    <h1 id="HeaderText">OPENSHOT</h1>
-  </div>
   <div id="content">
     <div id="target">
-      <canvas #canvas id="canavas" width="800" height="800">
-      </canvas>
-      <div id="target-text" *ngIf="trigger_calibrated">CALIBRATED</div>
+      <canvas #canvas id="canavas" width="800" height="800"> </canvas>
     </div>
     <div id="sidebar">
       <h1 id="SidebarText">SHOT&nbsp;SELECTION</h1>
       <ng-container *ngFor="let serie of series; let i = index">
-        <div class="serie" >
-          <div class="serie-number">{{i + 1}}. Series</div>
+        <div class="serie">
+          <div class="serie-number">{{ i + 1 }}. Series</div>
           <ng-container *ngFor="let shots of serie; let j = index">
-            <button class="shot" (click)="selectShot(i,j)">{{j + 1}}. Shot</button>
+            <div *ngIf="series[i + 1] || shots[j + 1]">
+              <button
+                class="shot"
+                (click)="shot_selected = true; selectShot(i, j)"
+              >
+                {{ j + 1 }}. Shot
+              </button>
+            </div>
           </ng-container>
         </div>
       </ng-container>
+      <div class="serie">
+        <div class="serie-number">Options</div>
+        <button
+          class="shot"
+          (click)="
+            calibratedTriggerPull = 5000;
+            trigger_calibrated = false;
+            trigger_samples = 0
+          "
+        >
+          Recalibrate
+        </button>
+        <button
+          class="shot"
+          (click)="shot_selected = false"
+          [disabled]="!shot_selected"
+        >
+          Deselect
+        </button>
+        <div id="target-text" *ngIf="trigger_calibrated">CALIBRATED</div>
+        <div id="target-text-disabled" *ngIf="!trigger_calibrated">
+          CALIBRATED
+        </div>
+      </div>
     </div>
   </div>
 </div>

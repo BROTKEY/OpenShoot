@@ -16,8 +16,7 @@
 }
 
 #content {
-    flex: 9;
-    min-height: 100%;
+    flex: 1;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -25,7 +24,7 @@
 
 #target {
     margin: 20px;
-    flex: 1.2;
+    flex: 0.8;
     box-shadow: 0 0 10px 5px #3d3d3d;
     background-color: #fff !important;
 }
@@ -33,6 +32,15 @@
 #target-text {
     text-align: center;
     background-color: #89ce94;
+    border-radius: 3px;
+    padding: 5px;
+    margin: 5px;
+    color: #000 !important;
+}
+
+#target-text-disabled {
+    text-align: center;
+    background-color: #ce8989;
     border-radius: 3px;
     padding: 5px;
     margin: 5px;
@@ -87,4 +95,10 @@ canvas {
     transition: background-color .2s ease-in-out;
     -moz-transition: background-color .2s ease-in-out;
     -webkit-transition: background-color .2s ease-in-out;
+}
+
+.shot:disabled {
+    background-color: #707070;
+    border: #c6eccc 2px solid;
+    color: #c6eccc !important;
 }
