@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   calibratedTriggerPull: number = 5000;
   trigger_samples = 0;
   trigger_calibrated = false;
-  startTime = new Date().getTime();
+  lastReceivedTime = new Date().getTime();
   trigger_pull_time = 0;
   shot_selected = false;
 
@@ -38,20 +38,20 @@ export class AppComponent implements OnInit {
         ((parseFloat(data[1]) * -1) / 3) * 271 + 400,
         parseFloat(data[2]),
       ];
-      if (this.trigger_samples < 1000 && shotdata[2] > 0) {
+      if (this.trigger_samples < 1 && shotdata[2] > 0) {
         this.calibratedTriggerPull =
           shotdata[2] < this.calibratedTriggerPull
             ? shotdata[2]
             : this.calibratedTriggerPull;
         this.trigger_samples++;
-        if (this.trigger_samples == 1000) {
+        if (this.trigger_samples == 1) {
           this.trigger_calibrated = true;
         }
         return;
       }
 
       if (receivedTime - this.trigger_pull_time < 2000) {
-        this.startTime = receivedTime;
+        this.lastReceivedTime = receivedTime;
         let series_offset = 1;
         if (this.series[this.series.length - 1].length == 1) {
           series_offset = 2;
@@ -72,22 +72,24 @@ export class AppComponent implements OnInit {
         this.series.push([]);
       }
 
-      if (receivedTime - this.startTime > 20000) {
+      if (receivedTime - this.lastReceivedTime > 2000) {
         this.series[this.series.length - 1][
           this.series[this.series.length - 1].length - 1
         ] = [];
-        this.startTime = receivedTime;
+        this.lastReceivedTime = receivedTime;
         return;
       }
 
-      this.startTime = receivedTime;
+      this.lastReceivedTime = receivedTime;
       this.series[this.series.length - 1][
         this.series[this.series.length - 1].length - 1
       ].push(shotdata);
 
       this.detectTriggerPull(shotdata[2], receivedTime);
 
-      if (this.shot_selected) return;
+      if (this.shot_selected) {
+        return;
+      }
 
       this.selectShot(
         this.series.length - 1,

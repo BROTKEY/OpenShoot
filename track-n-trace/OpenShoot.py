@@ -7,10 +7,11 @@ from websocket import create_connection
 
 debug = True
 
-trigger_state = 0
+trigger_state = 1
 
 scaling_factor = 3
-crop_factor = 5
+crop_factor = 12
+area_tolerance = 50
 
 
 def trace_data_collector():
@@ -60,11 +61,19 @@ def tracker():
                 bin, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
             areas = np.array([cv2.contourArea(cnt) for cnt in contours])
-            idxs = areas.argsort()
-            cnts2 = [contours[i] for i in idxs]
-            c = [cnts2[-1]]
+            idx = np.argwhere((areas > (1050-area_tolerance))
+                              & (areas < (1050+area_tolerance)))
+
+            if debug:
+                cv2.imshow("bin7", bin)
+
+            c = [contours[idx[0][0]]]
             (x, y, w, h) = cv2.boundingRect(c[0])
-            cv2.rectangle(bin, (x, y), (x+w, y+h), (0, 0, 0), 2)
+
+            bin = cv2.rectangle(bin, (x, y), (x+w, y+h), (0, 0, 0), 2)
+
+            if debug:
+                cv2.imshow("bin6", bin)
 
             center_target = np.mean([[x, y], [x+w, y+h]], axis=0)
 
@@ -84,7 +93,7 @@ def tracker():
             bin = cv2.threshold(
                 frame, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)[1]
 
-            contours, hierarchy = cv2.findContours(
+            contours, _ = cv2.findContours(
                 bin, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
             areas = np.array([cv2.contourArea(cnt) for cnt in contours])
